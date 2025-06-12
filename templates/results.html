@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .results-container {
+            background: #fff;
+            margin: 60px auto 0 auto;
+            padding: 32px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(64,120,192,0.08);
+            display: inline-block;
+        }
+        h2 {
+            color: #273c75;
+            margin-bottom: 28px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(64,120,192,0.04);
+        }
+        th, td {
+            border: 1px solid #b2bec3;
+            padding: 12px 32px;
+            font-size: 18px;
+        }
+        th {
+            background: #4078c0;
+            color: #fff;
+        }
+        tr:nth-child(even) td {
+            background: #f0f4f8;
+        }
+        .nav-links {
+            margin-top: 28px;
+        }
+        .nav-links a {
+            color: #4078c0;
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 17px;
+            padding: 8px 20px;
+            border-radius: 5px;
+            background: #eaf0fb;
+            transition: background 0.2s;
+        }
+        .nav-links a:hover {
+            background: #4078c0;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <h2>Election Results 📊</h2>
+        <table>
+            <tr>
+                <th>Candidate</th>
+                <th>Votes</th>
+            </tr>
+            {% for candidate, total in results %}
+            <tr>
+                <td>{{ candidate }}</td>
+                <td>{{ total }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('vote') }}">Vote</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Voting Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            text-align: center;
+            margin-top: 80px;
+        }
+        h2 {
+            color: #273c75;
+            margin-bottom: 40px;
+        }
+        .nav-links {
+            margin-top: 30px;
+        }
+        .nav-links a {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 12px 28px;
+            background: #4078c0;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+        .nav-links a:hover {
+            background: #273c75;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to E-Voting 🗳</h2>
+    <div class="nav-links">
+        <a href="{{ url_for('results') }}">View Results</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('vote') }}">Vote</a>
+        <a href="{{ url_for('admin_voters') }}">Admin Panel</a>
+    </div>
+</body>
+</html>

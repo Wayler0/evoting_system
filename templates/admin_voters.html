@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Voters</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f6fa; text-align: center; }
+        .container { background: #fff; margin: 60px auto; padding: 32px 40px; border-radius: 10px; box-shadow: 0 4px 16px rgba(64,120,192,0.08); display: inline-block; }
+        table { margin: 0 auto; border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #b2bec3; padding: 10px 24px; font-size: 16px; }
+        th { background: #4078c0; color: #fff; }
+        tr:nth-child(even) td { background: #f0f4f8; }
+        h2 { color: #273c75; margin-bottom: 28px; }
+        .nav-links { margin-top: 24px; }
+        .nav-links a { color: #4078c0; text-decoration: none; margin: 0 12px; font-size: 17px; }
+        .nav-links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registered Voters</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Has Voted?</th>
+            </tr>
+            {% for voter in voters %}
+            <tr>
+                <td>{{ voter.id }}</td>
+                <td>{{ voter.name }}</td>
+                <td>{{ 'Yes' if voter.has_voted else 'No' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('results') }}">Results</a>
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
