@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results | SecureVote</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            width: 80px;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .results-list {
+            text-align: left;
+            margin: 1.5rem auto 0 auto;
+            max-width: 340px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .results-list ul {
+            padding-left: 1.2rem;
+        }
+        .results-list li {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #888;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/logo.png" alt="SecureVote Logo" class="logo" onerror="this.style.display='none'">
+        <h2>Vote Tally</h2>
+        <div class="results-list">
+            <ul>
+                {% for result in results %}
+                <li>{{ result.name }} &mdash; <strong>{{ result.vote_count }}</strong> vote(s)</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="/" class="back-link">&larr; Back to Home</a>
+    </div>
+    <div class="footer">&copy; 2025 SecureVote. Official Voting System.</div>
+</body>
+</html>

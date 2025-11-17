@@ -1,0 +1,107 @@
+from flask import Flask, render_template, request, redirect, session, url_for
+import sqlite3
+import time
+
+app = Flask(__name__)
+# TODO: Use a secure, randomly generated secret key in production
+app.secret_key = 'change-this-in-production'
+
+# ---------------- DATABASE ---------------- #
+def get_db():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# ---------------- ROUTES ---------------- #
+
+@app.route('/')
+def index():
+    return render_template('index.html')  # Role selector
+
+# ----- ADMIN ----- #
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        password = request.form.get('password', '')
+        # TODO: Store admin password securely, not hardcoded
+        if password == 'admin123':
+            session['admin'] = True
+            return redirect('/admin/add')
+        else:
+            return render_template('admin.html', error="Access Denied")
+    return render_template('admin.html')
+
+@app.route('/admin/add', methods=['GET', 'POST'])
+def add_candidate():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+
+    conn = get_db()
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        if name:
+            conn.execute('INSERT INTO candidates (name) VALUES (?)', (name,))
+            conn.commit()
+    candidates = conn.execute('SELECT * FROM candidates').fetchall()
+    return render_template('add_candidate.html', candidates=candidates)
+
+@app.route('/admin/results')
+def results():
+    if not session.get('admin'):
+        return redirect(url_for('admin'))
+
+    conn = get_db()
+    results = conn.execute('''
+        SELECT c.name, COUNT(v.candidate_id) as vote_count
+        FROM candidates c
+        LEFT JOIN votes v ON c.id = v.candidate_id
+        GROUP BY c.id
+    ''').fetchall()
+    return render_template('results.html', results=results)
+
+# ----- VOTER ----- #
+@app.route('/voter', methods=['GET', 'POST'])
+def voter_auth():
+    if request.method == 'POST':
+        voter_id = request.form.get('voter_id', '').strip()
+        if not voter_id:
+            return render_template('voter_auth.html', error="Please enter your Voter ID.")
+        conn = get_db()
+        valid = conn.execute('SELECT * FROM registry WHERE voter_id = ?', (voter_id,)).fetchone()
+        voted = conn.execute('SELECT * FROM votes WHERE voter_id = ?', (voter_id,)).fetchone()
+
+        if not valid:
+            return render_template('voter_auth.html', error="Voter ID not recognized.")
+        elif voted:
+            return render_template('voter_auth.html', error="This voter has already voted.")
+        else:
+            return redirect(url_for('vote', voter_id=voter_id))
+    return render_template('voter_auth.html')
+
+@app.route('/vote/<voter_id>', methods=['GET', 'POST'])
+def vote(voter_id):
+    conn = get_db()
+    if request.method == 'POST':
+        candidate_id = request.form.get('candidate_id', '').strip()
+        if not candidate_id:
+            candidates = conn.execute('SELECT * FROM candidates').fetchall()
+            return render_template('vote.html', voter_id=voter_id, candidates=candidates, error="Please select a candidate.")
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            conn.execute('INSERT INTO votes (voter_id, candidate_id, timestamp) VALUES (?, ?, ?)',
+                         (voter_id, candidate_id, timestamp))
+            conn.commit()
+        except sqlite3.IntegrityError:
+            return render_template('vote.html', voter_id=voter_id, candidates=[], error="Vote could not be recorded.")
+        return redirect(url_for('thankyou'))
+
+    candidates = conn.execute('SELECT * FROM candidates').fetchall()
+    return render_template('vote.html', voter_id=voter_id, candidates=candidates)
+
+@app.route('/thankyou')
+def thankyou():
+    return render_template('thankyou.html')
+
+# ---------------- RUN ---------------- #
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | SecureVote</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        div {
+            display: block;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        input[type="password"] {
+            padding: 0.8rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            width: 80px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #888;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-bottom: 1.5rem;">
+            <img src="/static/logo.png" alt="SecureVote Logo" class="logo" style="width:48px; height:48px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.07); object-fit:cover;" onerror="this.style.display='none'">
+            <span style="font-size:2rem; font-weight:700; color:#2c3e50; letter-spacing:1px;">Admin Access</span>
+        </div>
+        <form action="" method="post">
+            <input type="password" name="password" placeholder="Enter password" id="AdminPassword" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <footer>
+        <div class="footer">&copy; 2025 SecureVote. Official Voting System.</div>
+    </footer>
+</body>
+</html>

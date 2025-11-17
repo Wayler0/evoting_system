@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Candidate | SecureVote</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            width: 80px;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        input[type="text"] {
+            padding: 0.8rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .candidate-list {
+            text-align: left;
+            margin: 1.5rem auto 0 auto;
+            max-width: 340px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .candidate-list h3 {
+            margin-top: 0;
+            color: #007bff;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .candidate-list ul {
+            padding-left: 1.2rem;
+        }
+        .candidate-list li {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+        .results-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .results-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #888;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/logo.png" alt="SecureVote Logo" class="logo" onerror="this.style.display='none'">
+        <h2>Add Candidate (Verified)</h2>
+        {% include '_messages.html' %}
+        <form method="POST">
+            <input type="text" name="voter_id" placeholder="Voter ID (e.g. KEV0001)" required>
+            <input type="text" name="full_name" placeholder="Full Name (ID)" required>
+            <button type="submit">Add Candidate</button>
+        </form>
+        <div class="candidate-list">
+            <h3>Current Candidates</h3>
+            <ul>
+                {% for candidate in candidates %}
+                <li>
+                    {{ candidate[0] }} - {{ candidate[1]}}
+                    <form method="POST" action="/admin/remove_candidate" style="display:inline; margin-left:10px;" onsubmit="return confirm('Are you sure you want to remove this candidate?');">
+                        <input type="hidden" name="voter_id" value="{{ candidate[0] }}">
+                        <input type="hidden" name="full_name" value="{{ candidate[1] }}">
+                        <button type="submit" style="background:#d9534f;color:#fff;border:none;border-radius:4px;padding:0.3em 0.7em;cursor:pointer;">Remove</button>
+                    </form>
+                </li>
+                {%  endfor %}
+            </ul>
+            <a href="/admin/results" class="results-link">View Results</a>
+        </div>
+    </div>
+    <div class="footer">&copy; 2025 SecureVote. Official Voting System.</div>
+</body>
+</html>

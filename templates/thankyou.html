@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+        }
+        p {
+            color: #007bff;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .results {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        a {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            border-radius: 6px;
+            padding: 0.7rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Thank You for voting!</h2>
+        {% include '_messages.html' %}
+        <p>Your vote has been recorded.</p>
+        <div class="results">
+            <!-- Results will be shown here. You can render results dynamically if needed. -->
+            <strong>Current Results:</strong>
+            <div id="live-results">
+                <span style="color:#888; font-size:0.95rem;">Loading...</span>
+            </div>
+        </div>
+        <a href="/">Return to home</a>
+        <script>
+        function fetchResults() {
+            fetch('/results_json')
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('live-results');
+                    if (data.length === 0) {
+                        resultsDiv.innerHTML = '<span style="color:#888; font-size:0.95rem;">No results yet.</span>';
+                        return;
+                    }
+                    let html = '<ul style="list-style:none; padding:0;">';
+                    data.forEach(row => {
+                        html += `<li style="margin:0.5em 0; font-size:1.05em;"><strong>${row.name}</strong>: <span style="color:#007bff; font-weight:700;">${row.vote_count}</span> votes</li>`;
+                    });
+                    html += '</ul>';
+                    resultsDiv.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('live-results').innerHTML = '<span style="color:#888; font-size:0.95rem;">Unable to load results.</span>';
+                });
+        }
+        fetchResults();
+        setInterval(fetchResults, 5000); // Refresh every 5 seconds
+        </script>
+    </div>
+</body>
+</html>
